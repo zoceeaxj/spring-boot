@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: com.spring-boot
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: Anuska
+Implementation-Vendor-Id: springboot
+Build-Jdk: 1.8.0_251
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/com.spring-boot
+Created-By: Maven Integration for Eclipse
+
