@@ -1,5 +1,6 @@
 package com.rab3tech.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.rab3tech.controller.dto.ProfileDTO;
+import com.rab3tech.dao.MagicDaoRepository;
 import com.rab3tech.dao.ProfileDao;
 import com.rab3tech.dao.ProfileEntity;
 
@@ -16,6 +18,9 @@ public class ProfileServiceImpl implements ProfileService {
 	
 	@Autowired
 	private ProfileDao profileDao;
+	
+	@Autowired
+	private MagicDaoRepository daoRepository;
 
 	@Override
 	public void show() {
@@ -126,8 +131,15 @@ public class ProfileServiceImpl implements ProfileService {
 	public String icreateSignup(ProfileDTO profileDTO) {
 		ProfileEntity entity=new ProfileEntity();
 		BeanUtils.copyProperties(profileDTO, entity);
-		String result =  profileDao.icreateSignup(entity);
-		return result;
+		//String result =  profileDao.icreateSignup(entity);
+		try {
+			entity.setTphoto(profileDTO.getFile().getBytes());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		daoRepository.save(entity);
+		return "success";
 	}
 
 	@Override
@@ -139,7 +151,8 @@ public class ProfileServiceImpl implements ProfileService {
 
 	@Override
 	public byte[] findPhotoByUsername(String pusername) {
-		return profileDao.findPhotoByUsername(pusername);
+		//return profileDao.findPhotoByUsername(pusername);
+		return daoRepository.findById(pusername).get().getTphoto();
 	}
 
 	@Override

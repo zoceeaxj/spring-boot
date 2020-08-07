@@ -1,30 +1,61 @@
 package com.rab3tech.dao;
 
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Set;
 
-import javax.servlet.annotation.WebListener;
-import javax.servlet.http.HttpSessionBindingEvent;
-import javax.servlet.http.HttpSessionBindingListener;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.web.multipart.MultipartFile;
 
 //this is a Plain Old Java Object (POJO) class used in DAO
 
-@WebListener
+@Entity
+@Table(name="iuser_login_tbl")
 public class ProfileEntity {
+	
+	@Id
+	@Column(length=30)
 	private String username;
+	
+	@Column(length=30)
 	private String password;
+	
+	@Column(length=100)
 	private String name;
+	
+	@Column(length=100)
 	private String email;
+	
+	@Column(length=12)
 	private String mobile;
+	
+	@Column(length=7)
 	private String gender;
+	
+	@Transient
 	private String photo;
+	
+	@Column(length=100)
 	private String qualification;
 
 	// This is used to hold image
+	//Spring Boot doesnt prefer multipart for image
+	@Transient
 	private MultipartFile file;
+	
+	@Column(name="photo",columnDefinition="longblob")
+	private byte[] tphoto;
+
+	public byte[] getTphoto() {
+		return tphoto;
+	}
+
+	public void setTphoto(byte[] tphoto) {
+		this.tphoto = tphoto;
+	}
 
 	public MultipartFile getFile() {
 		return file;
