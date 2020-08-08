@@ -115,7 +115,7 @@ public class CustomerController {
 		 */
 		// ProfileDTO profileDTO = new ProfileDTO(username, "", name, email, mobile,
 		// gender, photo, qualification);
-		profileService.updateSignup(profileDTO);
+		profileService.icreateSignup(profileDTO);
 		return "redirect:/profiles";
 		// resp.sendRedirect(req.getContextPath()+"/profiles");
 	}
@@ -141,7 +141,7 @@ public class CustomerController {
 
 		profileDTO.setPassword(password);
 		profileDTO.setUsername(profileDTO.getEmail());
-		profileService.createSignup(profileDTO);
+		profileService.icreateSignup(profileDTO);
 		model.addAttribute("hmmmm", "Hi , " + profileDTO.getName() + " , you have done signup successfully!!!!!!!!!!!");
 		return "login";
 

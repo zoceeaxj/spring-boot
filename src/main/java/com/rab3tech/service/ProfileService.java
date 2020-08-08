@@ -11,9 +11,6 @@ public interface ProfileService {
 	
 	void show();
 
-	String updateSignup(ProfileDTO profileDTO);
-
-	String createSignup(ProfileDTO profileDTO);
 
 	List<ProfileDTO> sortProfiles(String sort);
 
