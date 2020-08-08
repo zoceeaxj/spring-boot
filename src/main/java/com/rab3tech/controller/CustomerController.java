@@ -1,13 +1,14 @@
 package com.rab3tech.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.rab3tech.controller.dto.ProfileDTO;
+import com.rab3tech.service.EmailService;
 import com.rab3tech.service.ProfileService;
 import com.rab3tech.utils.Utils;
 
@@ -26,25 +28,22 @@ public class CustomerController {
 	@Autowired
 	private ProfileService profileService;
 	
-	@Autowired
-	private MailSender mailSender;
+	 @Autowired
+	 private JavaMailSender emailSender;
+
+	 @Autowired
+	 private EmailService emailService;
 	
 	@PostMapping("/changeImage")
-	public String updateImage(@RequestParam("file") MultipartFile file,@RequestParam("username") String username) {
+	public String updateImage(@RequestParam("file") MultipartFile file,@RequestParam("username") String username) throws IOException {
 		ProfileDTO profileDTO=new ProfileDTO();
 		profileDTO.setFile(file);
 		profileDTO.setUsername(username);
+		byte[] oldpic=profileService.findPhotoByUsername(username);
 		profileService.updatePhoto(profileDTO);
 
-		SimpleMailMessage email = new SimpleMailMessage();
-		email.setTo(username);
-		email.setSubject("Regarding profile image update");
-		email.setText("Hello your profile image is updatee");
-		mailSender.send(email);
-		
-		//Here write logic 
-		//1. update photo into database
-		//2. send email to the user
+		byte[] newpic=file.getBytes();
+		emailService.sendProfileEmail(username, "dummyaccforjava@gmail.com", username, oldpic, newpic);
 		return "redirect:/iprofiles";
 	}
 
@@ -189,7 +188,7 @@ public class CustomerController {
 	@GetMapping("/iprofiles")
 	public String iprofiles(Model model) {
 		// I need to fetch whole profiles data from database
-		List<ProfileDTO> profileDTOs = profileService.findAllWithPhoto();
+		List<ProfileDTO> profileDTOs = profileService.findAll();
 		model.addAttribute("profileDTOs", profileDTOs);
 		model.addAttribute("listoptions", profileService.findAllQualification());
 		return "iprofiles";
